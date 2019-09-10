@@ -1,0 +1,149 @@
+#inventory {
+    width: 100%;
+    height: 75%;
+    transition: opacity 0.3s;
+    //background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: visibility 0.3s;
+
+    .inventory-list {
+        width: 60.51vh;
+        height: calc(100% - 16.5vh);
+        //background-color: red;
+        margin: auto;
+        &.hide{
+            opacity: 0;
+        }
+    }
+
+    .item-list {
+        display: block;
+        width: 100%;
+        height: 100%;
+        // overflow-y: scroll;
+        outline: none;
+        transition: background 0.3s;
+        &.dragover {
+            background-color: rgba(255, 255, 255, 0.096);
+        }
+    }
+    .item-list-title {
+        justify-content: space-between;
+        align-items: center;
+        background-color: rgba(50, 150, 100, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        padding: 0.7vh 1vh;
+        height: 4vh;
+        margin-bottom: 0.4vh;
+        .title {
+            float: left;
+            color: rgba(255, 255, 255, 1.0);
+            font-size: 2vh;
+        }
+        .infos {
+            float: right;
+            color: rgba(255, 255, 255, 1.0);
+            font-size: 1vh;
+            padding-top: 0.5vh;
+        }
+    }
+    .item-icon {
+        user-select: none;
+        margin: auto;
+        width: 12vh;
+        height: 14vh * 0.8;
+        &.hide{
+            opacity: 0;
+        }
+        &.drag {
+            pointer-events: none;
+            position: absolute;
+        }
+        .item-icon-label {
+            position: absolute;
+            font-size: 1.2vh;
+            padding: 0.3vh 0.5vh;
+            text-align: center;
+        }
+        .item-icon-img {
+            width: 70%;
+            height: 75%;
+            margin: 1vh 2.1vh;
+            pointer-events: none
+        }
+    }
+    .item {
+        color: white;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        background-color: rgba(0, 0, 0, 0.15);
+        display: inline-block;
+        margin-bottom: 0.2vh;
+        margin-right: 0.1vh;
+        width: 12vh;
+        height: 14vh;
+        cursor: pointer;
+        transition: opacity 0.3s;
+        overflow: hidden;
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        &.dragging {
+            opacity: 0.2;
+        }
+        .item-icon-label {
+            position: absolute;
+            font-size: 1.2vh;
+            padding: 0.3vh 0.5vh;
+            text-align: center;
+        }
+        .item-desc {
+            width: 100%;
+            height: 3.5vh;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.397);
+            .name {
+                font-size: 1.2vh;
+                top: 50%;
+                transform: translateY(50%);
+                color: rgb(206, 206, 206);
+            }
+        }
+    }
+    .inventory-options {
+        text-align:center;
+
+        .option-panel {
+            margin-top: 9vh;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            bottom: 0;
+        }
+        .option-button {
+            display:inline-block;
+            width: 100%;
+            height: 6vh;
+            font-size: 2vh;
+            border:1px solid rgba(255, 255, 255, 0.25);
+            color: rgba(255, 255, 255, 0.685);
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: background 0.3s;
+            &.dragover {
+                background-color: rgba(0, 0, 0, 0.65);
+            }
+            &.drop {
+                margin-top: 6vh;
+            }
+        }
+        .option-button:focus {
+            outline: none;
+        }
+        input {
+            text-align: center; 
+        }        
+    }
+}
