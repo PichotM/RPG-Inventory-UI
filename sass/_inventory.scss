@@ -7,12 +7,12 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -55%);
     transition: visibility 0.3s;
 
     .inventory-list {
-        width: 60.51vh;
-        height: calc(100% - 16.5vh);
+        width: 63vh;
+        height: calc(100% - 15vh);
         //background-color: red;
         margin: auto;
         &.hide{
@@ -26,7 +26,6 @@
         height: 100%;
         // overflow-y: scroll;
         outline: none;
-        transition: background 0.3s;
         &.dragover {
             background-color: rgba(255, 255, 255, 0.096);
         }
@@ -34,15 +33,19 @@
     .item-list-title {
         justify-content: space-between;
         align-items: center;
-        background-color: rgba(50, 150, 100, 0.9);
-        border: 1px solid rgba(0, 0, 0, 0.2);
+        //background-color: rgba(50, 150, 100, 0.9);
+        //border: 1px solid rgba(0, 0, 0, 0.2);
         padding: 0.7vh 1vh;
         height: 4vh;
         margin-bottom: 0.4vh;
+        margin-right: 0.5vh;
         .title {
             float: left;
-            color: rgba(255, 255, 255, 1.0);
+            color: rgba(255, 255, 255, 0.5);
             font-size: 2vh;
+            &.selected, &:hover {
+                color: rgba(255, 255, 255, 1.0);
+            }
         }
         .infos {
             float: right;
@@ -54,8 +57,9 @@
     .item-icon {
         user-select: none;
         margin: auto;
-        width: 12vh;
-        height: 14vh * 0.8;
+        width: 10vh;
+        height: 9.5vh;
+        margin-bottom: 0.5vh;
         &.hide{
             opacity: 0;
         }
@@ -63,16 +67,10 @@
             pointer-events: none;
             position: absolute;
         }
-        .item-icon-label {
-            position: absolute;
-            font-size: 1.2vh;
-            padding: 0.3vh 0.5vh;
-            text-align: center;
-        }
         .item-icon-img {
             width: 70%;
             height: 75%;
-            margin: 1vh 2.1vh;
+            margin: 1.75vh 1.5vh;
             pointer-events: none
         }
     }
@@ -82,11 +80,11 @@
         background-color: rgba(0, 0, 0, 0.15);
         display: inline-block;
         margin-bottom: 0.2vh;
-        margin-right: 0.1vh;
+        margin-right: 0.5vh;
+        border-radius: 6px;
         width: 12vh;
-        height: 14vh;
+        height: 13.25vh;
         cursor: pointer;
-        transition: opacity 0.3s;
         overflow: hidden;
         &:hover {
             background-color: rgba(0, 0, 0, 0.1);
@@ -96,18 +94,21 @@
         }
         .item-icon-label {
             position: absolute;
-            font-size: 1.2vh;
+            font-size: 1vh;
             padding: 0.3vh 0.5vh;
-            text-align: center;
+            text-align: right;
+            color: rgba(206, 206, 206, 0.8);
         }
         .item-desc {
             width: 100%;
             height: 3.5vh;
             text-align: center;
-            background-color: rgba(0, 0, 0, 0.397);
+            //background-color: rgba(0, 0, 0, 0.397);
             .name {
                 font-size: 1.2vh;
-                top: 50%;
+                white-space: nowrap; 
+                overflow: hidden;
+                text-overflow: ellipsis;
                 transform: translateY(50%);
                 color: rgb(206, 206, 206);
             }
@@ -117,7 +118,7 @@
         text-align:center;
 
         .option-panel {
-            margin-top: 9vh;
+            margin-top: 13vh;
             display: flex;
             justify-content: center;
             flex-direction: column;
@@ -126,17 +127,19 @@
         .option-button {
             display:inline-block;
             width: 100%;
-            height: 6vh;
-            font-size: 2vh;
-            border:1px solid rgba(255, 255, 255, 0.25);
+            height: 4vh;
+            font-size: 1.5vh;
+            margin-top: 0.2vh;
+            border:1px solid rgba(100, 100, 100, 0.5);
+            border-radius: 4px;
             color: rgba(255, 255, 255, 0.685);
-            background-color: rgba(0, 0, 0, 0.5);
-            transition: background 0.3s;
+            background-color: rgba(20, 20, 20, 0.6);
             &.dragover {
                 background-color: rgba(0, 0, 0, 0.65);
+                border:1px solid rgba(140, 140, 140, 0.8);
             }
             &.drop {
-                margin-top: 6vh;
+                margin-top: 5vh;
             }
         }
         .option-button:focus {
@@ -145,5 +148,8 @@
         input {
             text-align: center; 
         }        
+    }
+    .gunInventory {
+        position: fixed;
     }
 }

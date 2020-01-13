@@ -6,13 +6,16 @@ import { dragStore } from "./store/DragStore";
 import { inventoryStore } from './store/InventoryStore'
 import { CSSTransition } from 'react-transition-group';
 
+// TODO redo the router-dorm
+
+const env = process.env.NODE_ENV || 'dev';
+
 @observer
 export class App extends Component<any, any> {
+    private keydownCB: (KeyboardEvent) => void = null
+
     constructor(props) {
         super(props)
-        this.state = {
-            visible : false
-        }
 
         this.componentDidMount = this.componentDidMount.bind(this);
     }
@@ -22,14 +25,11 @@ export class App extends Component<any, any> {
 
         const appHandlers = {
             showInventory(inventoryData) {
-                inventoryStore.Create(inventoryData)
-                t.setState({ visible : true })
+                inventoryStore.Create(inventoryData, false)
+                inventoryStore.inventoryVisible = true
             },
-            hideInventory() {
-                inventoryStore.Reset()
-                t.setState({ visible : false })
-                
-                fetch('http://pichot/hideInventory', { method: 'POST', body: "{}" })
+            updateInventory(inventoryData) {
+                inventoryStore.Create(inventoryData, true)
             }
         };
 
@@ -39,27 +39,35 @@ export class App extends Component<any, any> {
         })
 
         document.addEventListener('mouseup', e => {
-            dragStore.mouseup(e)
+            dragStore.mouseup()
         })
 
         document.addEventListener('mousemove', e => {
-            if (dragStore.dragging) {
+            if (dragStore.dragging)
                 dragStore.setMouse(e)
-            }
         })
+        
+        this.keydownCB = (e: KeyboardEvent) => {
+            if (e.key === 'Tab' || e.key === 'Escape' || e.key === 'K')
+                inventoryStore.Hide()
+        }
+
+        document.addEventListener('keydown', this.keydownCB)
     }
 
-    // todo unmount
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.keydownCB)
+    }
 
     render() {
         return (
             <CSSTransition
-            in={this.state.visible}
-            classNames='viewport'
+            in={inventoryStore.inventoryVisible}
+            classNames='transitionOpacity'
             timeout={500}
             unmountOnExit
             >
-                <div>
+                <div className="viewport">
                     <div className="blurBackground"></div>
                     <Inventory />
                 </div>

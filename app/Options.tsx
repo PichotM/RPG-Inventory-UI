@@ -15,9 +15,13 @@ export class Options extends Component<any, any> {
         this.onAmountChange = this.onAmountChange.bind(this);
     }
 
+    componentDidMount() {
+        dragStore.amount = this.state.amount
+    }
+
     onAmountChange(e) {
         this.setState({ amount : e.target.value })
-        dragStore.amount = this.state.amount
+        dragStore.amount = e.target.value
     }
 
     render() {

@@ -3,39 +3,16 @@ import { observable } from "../../node_modules/mobx";
 class InventoryStore {
     @observable
     public pockets: any[] = [
-        {
-            name: 'Batte de baseball',
-            desc: 'Une batte de baseball, rien de plus',
-            qty: 777,
-            icon: 'bat'
-        },
-        {
-            label: '!',
-            labelColor: 'rgb(114, 196, 67)',
-            name: 'Hamburger',
-            desc: 'Un magnifique hamburger cuisiné de la main du grand maître Utopic',
-            qty: 1,
-            icon: 'burger'
-        },
-        {  label: 3, labelColor: 'red', name: '7.62mm', desc: 'Ce qui va bientôt terminer dans le crâne de Jefferson Parker', qty: 1, icon: 'bullet' },
-        {
-            name: 'item test',
-            desc: 'Un simple carton pour remplir un vide',
-            qty: 1
-        },
-        { name: 'Album de Skartiz', desc: 'Retrouvez un condensé de tous les meilleurs hits 2017-2019 de ton rappeur préféré SKARTIZ.', qty: 1, icon: 'music' },
-        { name: 'Radio', desc: 'Une radio pour diffuser votre voix sur d\'autres fréquences', icon: 'radio', qty: 1 }
+        { name : "Argent" },
+        { name : "Argent sale" }
     ]
 
     @observable
+    public clothes: any[] = []
+
+    @observable
     public target: any[] = [
-        { name: 'Album de Skartiz', desc: 'Retrouvez un condensé de tous les meilleurs hits 2017-2019 de ton rappeur préféré SKARTIZ.', qty: 1, icon: 'music' },
-        { name: 'Objet', desc: 'Un simple objet.', qty: 1 },
-        { name: 'Vêtement', desc: 'Une belle chemise bleue.', qty: 1, icon: 'shirt' },
-        { name: 'Pantalon', desc: 'Un magnifique jean slim noir.', qty: 10, icon: 'jean' },
-        { name: 'Masque', desc: 'Un masque classique acheté à Vespucci Beach.', qty: 1, icon: 'mask' },
-        { name: 'Menotte', desc: 'Des menottes cool.', qty: 1, icon: 'cuff' },
-        { name: 'Radio', desc: 'Une radio pour diffuser votre voix sur d\'autres fréquences', icon: 'radio', qty: 1 }
+        { name : "Argent" },
     ]
 
     @observable
@@ -45,29 +22,85 @@ class InventoryStore {
     public targetWeight: Number = 0;
 
     @observable
-    public targetMaxWeight: Number = -1;
+    public targetMaxWeight: Number = process.env.NODE_ENV == 'production' ? -1 : 1;
+
+    @observable
+    public weaponOne: String;
+    public weaponTwo: String;
+    public weaponThree: String;
+
+    @observable
+    public targetClothes: Object = [];
+
+    @observable
+    public inventoryVisible: boolean = process.env.NODE_ENV == 'development';
+
+    private sortObject(obj) {
+        return obj.sort(function(a, b) {
+            if(a.name < b.name) { return -1; }
+            if(a.name > b.name) { return 1; }
+            return 0;
+        })
+    }
 
     public Reset() {
         this.pockets = []
+        this.clothes = []
+
         this.target = []
+        this.targetClothes = []
+
+        this.weaponOne = null;
+        this.weaponTwo = null;
+        this.weaponThree = null;
+
         this.pocketsWeight = 0
         this.targetWeight = 0
-        this.targetMaxWeight = 0
+        this.targetMaxWeight = -1
     }
 
-    public Create(inventoryData) {
-        this.Reset()
+    public Create(inventoryData, boolUpdate) {
+        if (!boolUpdate)
+            this.Reset()
+
+        if (inventoryData.weaponOne)
+            this.weaponOne = inventoryData.weaponOne;
+
+        if (inventoryData.weaponTwo)
+            this.weaponTwo = inventoryData.weaponTwo;
+
+        if (inventoryData.weaponThree)
+            this.weaponThree = inventoryData.weaponThree;
 
         if (inventoryData.inv) {
             this.pockets = inventoryData.inv
+            this.pockets = this.sortObject(this.pockets);
+
             this.pocketsWeight = inventoryData.pocketsWeight
+
+            this.clothes = inventoryData.clothes
+            this.clothes = this.sortObject(this.clothes);
         }
         
         if (inventoryData.target) {
             this.target = inventoryData.target
+            this.target = this.sortObject(this.target);
+
+            this.targetClothes = inventoryData.targetClothes
+            this.targetClothes = this.sortObject(this.targetClothes);
+
             this.targetWeight = inventoryData.targetWeight
-            this.targetMaxWeight = inventoryData.targetMaxWeight
         }
+
+        if (this.targetMaxWeight)
+            this.targetMaxWeight = inventoryData.targetMaxWeight
+    }
+
+    public Hide() {
+        this.Reset()
+        this.inventoryVisible = false
+                
+        fetch('http://pichot/hideInventory', { method: 'POST', body: "{}" })
     }
 }
 

@@ -6,41 +6,30 @@ import { dragStore } from './store/DragStore'
 import { inventoryStore } from './store/InventoryStore'
 import { observer } from '../node_modules/mobx-react'
 import { Item } from './item'
+import { SwitchTransition, CSSTransition  } from 'react-transition-group'
+import { Icons } from './icons'
+
+const FadeTransition = props => (
+    <CSSTransition
+      {...props}
+      classNames="transition"
+      addEndListener={(node, done) => {
+        node.addEventListener("transitionend", done, false);
+      }}
+    />
+);
+  
 
 @observer
 export class Inventory extends Component<any, any> {
     private draggable: HTMLElement = null
-    private right: HTMLElement = null
-    
-    private keydownCB: (KeyboardEvent) => void = null
-
-    private rightCB: (KeyboardEvent) => void = null
 
     constructor(props) {
         super(props)
-        this.state = {}
-    }
-
-    componentDidMount() {
-        this.keydownCB = (e: KeyboardEvent) => {
-            if (e.key === 'Tab' || e.key === 'Escape') {
-                // this.props.history.push('/')
-            }
+        this.state = {
+            clothes : false,
+            targetClothes : false
         }
-        document.addEventListener('keydown', this.keydownCB)
-
-        this.rightCB = (e: KeyboardEvent) => {
-            event.preventDefault()
-        }
-        document.addEventListener('contextmenu', this.rightCB);
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener('keydown', this.keydownCB)
-        document.removeEventListener('contextmenu', this.rightCB)
-
-        inventoryStore.Reset()
-        //this.state.inventory['style'].offsetWidth = "25%"
     }
 
     get dragging() {
@@ -68,25 +57,53 @@ export class Inventory extends Component<any, any> {
     }
     
     render() {
+        const icons = Icons
+
         return (
             <div id="inventory">
-                <div id="me" className="inventory-list">
+                <div className="inventory-list">
                     <div className="item-list-title">
-                        <div className="title">Inventaire</div>
+                        <div className={"title" + (this.state.clothes ? "" : " selected")} onClick={() => this.setState({ clothes : false })}>Inventaire</div>
+                        <div className="title" style={{ pointerEvents: 'none' }}>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
+                        <div className={"title" + (!this.state.clothes ? "" : " selected")} onClick={() => this.setState({ clothes : true })} >Vêtements</div>
                         <div className="infos">{inventoryStore.pocketsWeight} / 45</div>
                     </div>
-                    <ItemList items={inventoryStore.pockets} eventName="inventory" />
+                    <SwitchTransition>
+                        <FadeTransition key={this.state.clothes ? "lol" : "no"}>
+                            <ItemList items={this.state.clothes ? inventoryStore.clothes : inventoryStore.pockets} eventName="inventory" />
+                        </FadeTransition>
+                    </SwitchTransition>
+
+                    <div className="gunInventory">
+                        <div className="item-list-title">
+                            <div className="title selected" style={{ pointerEvents: 'none' }}>Armes</div>
+                        </div>
+                        <Item keyNumber="1" eventName="weaponOne" data={inventoryStore.weaponOne && { name : inventoryStore.weaponOne }} />
+                        <Item keyNumber="2" eventName="weaponTwo" data={inventoryStore.weaponTwo && { name : inventoryStore.weaponTwo }} />
+                        <Item keyNumber="3" eventName="weaponThree" data={inventoryStore.weaponThree && { name : inventoryStore.weaponThree }} />
+                    </div>
                 </div>
 
                 <Options />
 
-                    <div id="target" className={"inventory-list " + (inventoryStore.targetMaxWeight == -1 ? "hide" : "")}>
-                        <div className="item-list-title">
-                            <div className="title">Coffre</div>
-                            <div className="infos">{inventoryStore.targetWeight} / {inventoryStore.targetMaxWeight}</div>
-                        </div>
-                        <ItemList items={inventoryStore.target} eventName="targetInventory" />
+                <div className={"inventory-list " + (inventoryStore.targetMaxWeight <= 0 ? "hide" : "")}>
+                    {inventoryStore.targetMaxWeight > 0 && (
+                    <div className="item-list-title">
+                        <div className={"title" + (this.state.targetClothes ? "" : " selected")} onClick={() => this.setState({ targetClothes : false })}>Coffre</div>
+                        <div className="title" style={{ pointerEvents: 'none' }}>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
+                        <div className={"title" + (!this.state.targetClothes ? "" : " selected")} onClick={() => this.setState({ targetClothes : true })} >Vêtements</div>
+                        <div className="infos">{inventoryStore.targetWeight} / {inventoryStore.targetMaxWeight}</div>
                     </div>
+                    )}
+                    
+                    {inventoryStore.targetMaxWeight > 0 && (
+                    <SwitchTransition>
+                        <FadeTransition key={this.state.targetClothes ? "lol" : "no"}>
+                            <ItemList IsTarget={true} items={this.state.targetClothes ? inventoryStore.targetClothes : inventoryStore.target} eventName="targetInventory" />
+                        </FadeTransition>
+                    </SwitchTransition>
+                    )}
+                </div>
 
                 <div className={'item-icon drag ' + this.dragging} style={this.dragStyle} ref={draggable => (this.draggable = draggable)}>
                     <Item data={this.itemData} key={this.itemKey} />

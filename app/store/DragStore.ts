@@ -1,5 +1,6 @@
-import { observable, action, computed } from 'mobx'
+import { observable, action } from 'mobx'
 import { Component } from 'react';
+import { inventoryStore } from './InventoryStore'
 
 class DragStore {
     @observable
@@ -12,6 +13,7 @@ class DragStore {
 
     @observable
     public dragging: boolean = false
+    public isTarget: boolean = false
 
     @observable
     public mousex: number = 0
@@ -29,30 +31,29 @@ class DragStore {
     }
 
     @action
-    public mouseup(e) {
+    public mouseup() {
+        
         this.dragging = false
-        this.itemData = null
-        this.itemKey = null
 
-        switch(this.eventName) {
-            case "useInventory":
-                //
-            case "giveInventory":
-                //
-            case "throwInventory":
-                //
-            case "infoInventory":
-                //
-            case "renameInventory":
-                //
-            case "inventory":
-                //
-            case "targetInventory":
-                //
-            default:
+        if (this.eventName && (this.eventName != "inventory" || this.isTarget)) {
+            switch(this.eventName) {
+                case "renameInventory":
+                    inventoryStore.Hide()
+                    break;
+                default:
+            }
+
+            fetch('http://pichot/inventoryInteraction', { method: 'POST', body: JSON.stringify({
+                eventName : this.eventName,
+                itemData : this.itemData,
+                itemKey : this.itemKey,
+                amount : this.amount
+            })})
         }
 
-        this.amount = 1
+        this.itemData = null
+        this.itemKey = null
+        this.eventName = null
 
         if (this.component)
             this.component.setState({ dragging: false })
@@ -62,6 +63,7 @@ class DragStore {
     public mousedown(e, component) {
         this.itemData = component.props.data
         this.itemKey = component.key
+        this.isTarget = component.props.target
     
         this.setMouse(e)
         this.component = component

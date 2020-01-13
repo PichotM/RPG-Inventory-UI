@@ -16,9 +16,11 @@ export class ItemList extends Component<any, any> {
     }
 
     get items() {
-        return this.props.items.map((item, id) => {
-            return <Item data={item} key={id} />
-        })
+        if (this.props.items) {
+            return this.props.items.map((item, id) => {
+                return <Item target={this.props.IsTarget} data={item} key={id} />
+            })
+        }
     }
 
     get dragOver() {

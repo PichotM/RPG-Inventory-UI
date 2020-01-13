@@ -17,11 +17,13 @@ export class OptionButton extends Component<any, any> {
     }
 
     onMouseEnter(e) {
+        if (dragStore.isTarget) return;
         dragStore.eventName = this.props.eventName
         this.setState({ dragOver: true })
     }
 
     onMouseLeave(e) {
+        if (dragStore.isTarget) return;
         dragStore.eventName = null
         this.setState({ dragOver: false })
     }
