@@ -17,7 +17,7 @@ export class ItemList extends Component<any, any> {
 
     get items() {
         if (this.props.items) {
-            return this.props.items.map((item, id) => {
+            return this.props.items.sort((a, b) => a.name.localeCompare(b.name)).map((item, id) => {
                 return <Item target={this.props.IsTarget} data={item} key={id} />
             })
         }
@@ -38,8 +38,9 @@ export class ItemList extends Component<any, any> {
     }
 
     filteredItems(searchValue) {
-        return this.props.items.map((item, id) => {
-            if (item.name.indexOf(searchValue) != -1)
+        const low = searchValue.toLowerCase()
+        return this.props.items.sort((a, b) => a.name.localeCompare(b.name)).map((item, id) => {
+            if (item.name.toLowerCase().indexOf(low) != -1)
                 return <Item target={this.props.IsTarget} data={item} key={id} />
         })
     }
