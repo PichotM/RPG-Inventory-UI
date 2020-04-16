@@ -17,7 +17,19 @@ export class ItemList extends Component<any, any> {
 
     get items() {
         if (this.props.items) {
-            return this.props.items.map((item, id) => {
+            const order = this.props.order;
+            return this.props.items.sort((a, b) => {
+                switch(order) {
+                    case 0:
+                        return a.name.toString().localeCompare(b.name.toString());
+                    
+                    case 1:
+                        return b.qty - a.qty
+
+                    case 2:
+                }
+                
+            }).map((item, id) => {
                 return <Item target={this.props.IsTarget} data={item} key={id} />
             })
         }
@@ -35,6 +47,14 @@ export class ItemList extends Component<any, any> {
     onMouseLeave(e) {
         dragStore.eventName = null
         this.setState({ dragOver: false })
+    }
+
+    filteredItems(searchValue) {
+        const low = searchValue.toLowerCase()
+        return this.props.items.sort((a, b) => a.name.toString().localeCompare(b.name.toString())).map((item, id) => {
+            if (item.name.toString().toLowerCase().indexOf(low) != -1)
+                return <Item target={this.props.IsTarget} data={item} key={id} />
+        })
     }
 
     scroll({ style, ...props }) {
@@ -61,7 +81,7 @@ export class ItemList extends Component<any, any> {
                 tabIndex={-1}
             >
                 <Scrollbars renderThumbVertical={this.scroll}>
-                    {this.items}
+                    {this.props.searchValue.length == 0 ? this.items : this.filteredItems(this.props.searchValue) }
                 </Scrollbars>
             </div>
         )

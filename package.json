@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "parcel index.pug --no-cache -d ../dist",
     "build": "parcel build index.pug --no-cache -d ../dist --public-url '.'",
-    "webpack": "NODE_ENV=production webpack --mode production",
+    "webpack": "SET NODE_ENV=production webpack --mode production",
     "devWebpack": "webpack-dev-server --mode development"
   },
   "keywords": [],
