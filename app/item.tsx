@@ -77,6 +77,7 @@ export class Item extends Component<any, any> {
                 
                 onMouseEnter={this.onMouseEnter.bind(this)}
                 onMouseLeave={this.onMouseLeave.bind(this)}
+                onContextMenu={(e) => e.preventDefault()}
             >
                 
                 {(this.props.keyNumber || (this.props.data && this.props.data.qty)) && this.label}
