@@ -37,6 +37,13 @@ export class ItemList extends Component<any, any> {
         this.setState({ dragOver: false })
     }
 
+    filteredItems(searchValue) {
+        return this.props.items.map((item, id) => {
+            if (item.name.indexOf(searchValue) != -1)
+                return <Item target={this.props.IsTarget} data={item} key={id} />
+        })
+    }
+
     scroll({ style, ...props }) {
         return (
             <div
@@ -61,7 +68,7 @@ export class ItemList extends Component<any, any> {
                 tabIndex={-1}
             >
                 <Scrollbars renderThumbVertical={this.scroll}>
-                    {this.items}
+                    {this.props.searchValue.length == 0 ? this.items : this.filteredItems(this.props.searchValue) }
                 </Scrollbars>
             </div>
         )

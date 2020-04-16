@@ -28,7 +28,9 @@ export class Inventory extends Component<any, any> {
         super(props)
         this.state = {
             clothes : false,
-            targetClothes : false
+            targetClothes : false,
+            searchPocketsValue: '',
+            searchOtherValue: ''
         }
     }
 
@@ -66,11 +68,13 @@ export class Inventory extends Component<any, any> {
                         <div className={"title" + (this.state.clothes ? "" : " selected")} onClick={() => this.setState({ clothes : false })}>Inventaire</div>
                         <div className="title" style={{ pointerEvents: 'none' }}>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
                         <div className={"title" + (!this.state.clothes ? "" : " selected")} onClick={() => this.setState({ clothes : true })} >Vêtements</div>
+                        <div className="title" style={{ pointerEvents: 'none' }}>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
+                        <div className="title"><input className="searchBox" type="text" onChange={(event) => this.setState({ searchPocketsValue: event.target.value })} placeholder="Rechercher"/></div>
                         <div className="infos">{inventoryStore.pocketsWeight} / 45</div>
                     </div>
                     <SwitchTransition>
                         <FadeTransition key={this.state.clothes ? "lol" : "no"}>
-                            <ItemList items={this.state.clothes ? inventoryStore.clothes : inventoryStore.pockets} eventName="inventory" />
+                            <ItemList items={this.state.clothes ? inventoryStore.clothes : inventoryStore.pockets} searchValue={this.state.searchPocketsValue} eventName="inventory" />
                         </FadeTransition>
                     </SwitchTransition>
 
@@ -92,6 +96,8 @@ export class Inventory extends Component<any, any> {
                         <div className={"title" + (this.state.targetClothes ? "" : " selected")} onClick={() => this.setState({ targetClothes : false })}>Coffre</div>
                         <div className="title" style={{ pointerEvents: 'none' }}>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
                         <div className={"title" + (!this.state.targetClothes ? "" : " selected")} onClick={() => this.setState({ targetClothes : true })} >Vêtements</div>
+                        <div className="title" style={{ pointerEvents: 'none' }}>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
+                        <div className="title"><input className="searchBox" type="text" onChange={(event) => this.setState({ searchOtherValue: event.target.value })} placeholder="Rechercher"/></div>
                         <div className="infos">{inventoryStore.targetWeight} / {inventoryStore.targetMaxWeight}</div>
                     </div>
                     )}
@@ -99,7 +105,7 @@ export class Inventory extends Component<any, any> {
                     {inventoryStore.targetMaxWeight > 0 && (
                     <SwitchTransition>
                         <FadeTransition key={this.state.targetClothes ? "lol" : "no"}>
-                            <ItemList IsTarget={true} items={this.state.targetClothes ? inventoryStore.targetClothes : inventoryStore.target} eventName="targetInventory" />
+                            <ItemList IsTarget={true} items={this.state.targetClothes ? inventoryStore.targetClothes : inventoryStore.target} searchValue={this.state.searchOtherValue} eventName="targetInventory" />
                         </FadeTransition>
                     </SwitchTransition>
                     )}

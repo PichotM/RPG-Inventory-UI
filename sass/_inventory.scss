@@ -46,6 +46,22 @@
             &.selected, &:hover {
                 color: rgba(255, 255, 255, 1.0);
             }
+
+            &:last-child {
+                float: right;
+            }
+
+            .searchBox {
+                border: .2px solid grey;
+                border-radius: 5px;
+                font-size: 9px;
+                padding: 5px;
+                text-align: center;
+
+                &:focus {
+                    outline: none;
+                }
+            }
         }
         .infos {
             float: right;
