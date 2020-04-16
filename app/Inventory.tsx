@@ -30,7 +30,9 @@ export class Inventory extends Component<any, any> {
             clothes : false,
             targetClothes : false,
             searchPocketsValue: '',
-            searchOtherValue: ''
+            searchOtherValue: '',
+            pocketsOrder: 0,
+            targetOrder: 0
         }
     }
 
@@ -57,6 +59,14 @@ export class Inventory extends Component<any, any> {
             top: dragStore.mousey - offset * 2
         }
     }
+
+    requestFullFocus() {
+        fetch('http://gtalife/askFullFocus', { method: 'POST', body: "{}" })
+    }
+
+    releaseFullFocus() {
+        fetch('http://gtalife/releaseFullFocus', { method: 'POST', body: "{}" })
+    }
     
     render() {
         const icons = Icons
@@ -69,12 +79,21 @@ export class Inventory extends Component<any, any> {
                         <div className="title" style={{ pointerEvents: 'none' }}>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
                         <div className={"title" + (!this.state.clothes ? "" : " selected")} onClick={() => this.setState({ clothes : true })} >Vêtements</div>
                         <div className="title" style={{ pointerEvents: 'none' }}>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
-                        <div className="title"><input className="searchBox" type="text" onChange={(event) => this.setState({ searchPocketsValue: event.target.value })} placeholder="Rechercher"/></div>
+                        <div className="title">
+                            <span className="dropdown-parent">Trier par &#9660;</span>
+                            <div className="dropdown">
+                                <div onClick={() => this.setState({ pocketsOrder : 0 })} className={this.state.pocketsOrder == 0 ? "selected" : ""}>{this.state.pocketsOrder == 0 ? "✔ " : ""}Alphabétique</div>
+                                <div onClick={() => this.setState({ pocketsOrder : 1 })} className={this.state.pocketsOrder == 1 ? "selected" : ""}>{this.state.pocketsOrder == 1 ? "✔ " : ""}Nombre</div>
+                                {/* <div onClick={() => this.setState({ pocketsOrder : 2 })} className={this.state.pocketsOrder == 2 ? "selected" : ""}>{this.state.pocketsOrder == 2 ? "✔ " : ""}Poids</div> */}
+                            </div>
+                        </div>
+                        <div className="title" style={{ pointerEvents: 'none' }}>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
+                        <div className="title"><input onFocus={() => this.requestFullFocus()} onBlur={() => this.releaseFullFocus()} className="searchBox" type="text" onChange={(event) => this.setState({ searchPocketsValue: event.target.value })} placeholder="Rechercher"/></div>
                         <div className="infos">{inventoryStore.pocketsWeight} / 45</div>
                     </div>
                     <SwitchTransition>
                         <FadeTransition key={this.state.clothes ? "lol" : "no"}>
-                            <ItemList items={this.state.clothes ? inventoryStore.clothes : inventoryStore.pockets} searchValue={this.state.searchPocketsValue} eventName="inventory" />
+                            <ItemList items={this.state.clothes ? inventoryStore.clothes : inventoryStore.pockets} order={this.state.pocketsOrder} searchValue={this.state.searchPocketsValue} eventName="inventory" />
                         </FadeTransition>
                     </SwitchTransition>
 
@@ -97,7 +116,16 @@ export class Inventory extends Component<any, any> {
                         <div className="title" style={{ pointerEvents: 'none' }}>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
                         <div className={"title" + (!this.state.targetClothes ? "" : " selected")} onClick={() => this.setState({ targetClothes : true })} >Vêtements</div>
                         <div className="title" style={{ pointerEvents: 'none' }}>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
-                        <div className="title"><input className="searchBox" type="text" onChange={(event) => this.setState({ searchOtherValue: event.target.value })} placeholder="Rechercher"/></div>
+                        <div className="title">
+                            <span className="dropdown-parent">Trier par &#9660;</span>
+                            <div className="dropdown">
+                                <div onClick={() => this.setState({ targetOrder : 0 })} className={this.state.targetOrder == 0 ? "selected" : ""}>{this.state.targetOrder == 0 ? "✔ " : ""}Alphabétique</div>
+                                <div onClick={() => this.setState({ targetOrder : 1 })} className={this.state.targetOrder == 1 ? "selected" : ""}>{this.state.targetOrder == 1 ? "✔ " : ""}Nombre</div>
+                                {/* <div onClick={() => this.setState({ targetOrder : 2 })} className={this.state.targetOrder == 2 ? "selected" : ""}>{this.state.targetOrder == 2 ? "✔ " : ""}Poids</div> */}
+                            </div>
+                        </div>
+                        <div className="title" style={{ pointerEvents: 'none' }}>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
+                        <div className="title"><input onFocus={() => this.requestFullFocus()} onBlur={() => this.releaseFullFocus()} className="searchBox" type="text" onChange={(event) => this.setState({ searchOtherValue: event.target.value })} placeholder="Rechercher"/></div>
                         <div className="infos">{inventoryStore.targetWeight} / {inventoryStore.targetMaxWeight}</div>
                     </div>
                     )}
@@ -105,7 +133,7 @@ export class Inventory extends Component<any, any> {
                     {inventoryStore.targetMaxWeight > 0 && (
                     <SwitchTransition>
                         <FadeTransition key={this.state.targetClothes ? "lol" : "no"}>
-                            <ItemList IsTarget={true} items={this.state.targetClothes ? inventoryStore.targetClothes : inventoryStore.target} searchValue={this.state.searchOtherValue} eventName="targetInventory" />
+                            <ItemList IsTarget={true} items={this.state.targetClothes ? inventoryStore.targetClothes : inventoryStore.target} order={this.state.targetOrder} searchValue={this.state.searchOtherValue} eventName="targetInventory" />
                         </FadeTransition>
                     </SwitchTransition>
                     )}

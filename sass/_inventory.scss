@@ -47,19 +47,46 @@
                 color: rgba(255, 255, 255, 1.0);
             }
 
-            &:last-child {
-                float: right;
+            .dropdown {
+                position: absolute;
+                min-width: 12%;
+                max-width: 12%;
+
+                div {
+                    background: rgba(100, 100, 100, 0.3);
+                    padding: 5px;
+                    text-align: center;
+                }
+
+                div.selected, div:hover {
+                    background: rgba(100, 100, 100, 0.6);
+                }
+
+                display: none;
+                z-index: 1;
+            }
+
+            &:hover .dropdown, .dropdown:hover {
+                display: block;
             }
 
             .searchBox {
-                border: .2px solid grey;
+                border: .2px solid rgba(100, 100, 100, 0.8);
                 border-radius: 5px;
                 font-size: 9px;
                 padding: 5px;
                 text-align: center;
 
+                background: rgba(100, 100, 100, 0);
+                color: white;
+
+                &::-webkit-input-placeholder { /* Edge */
+                    color: white;
+                }
+
                 &:focus {
                     outline: none;
+                    background: rgba(100, 100, 100, 0.3);
                 }
             }
         }
