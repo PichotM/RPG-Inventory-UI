@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "parcel index.pug --no-cache -d ../dist",
-    "build": "parcel build index.pug --no-cache -d ../dist --public-url '.'",
-    "webpack": "NODE_ENV=production webpack --mode production",
+    "dev": "parcel index.pug --no-cache -d ./dist",
+    "build": "parcel build index.pug --no-cache -d ./dist --public-url '.'",
+    "webpack": "SET NODE_ENV=production && webpack --mode production",
     "devWebpack": "webpack-dev-server --mode development"
   },
   "keywords": [],
@@ -17,11 +17,11 @@
     "@types/react-dom": "^16.0.7",
     "@types/react-router-dom": "^4.3.1",
     "@types/react-transition-group": "^4.2.2",
-    "acorn": "^6.0.0",
+    "acorn": "^6.4.1",
     "dragster": "^0.1.3",
     "mobx": "^5.1.1",
     "mobx-react": "^6.1.3",
-    "parcel-bundler": "^1.12.3",
+    "parcel-bundler": "^1.12.4",
     "react": "^16.9.0",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.9.0",
@@ -29,7 +29,7 @@
     "react-transition-group": "^4.3.0",
     "socket.io-client": "^2.1.1",
     "typescript": "^3.5.1",
-    "webpack-obfuscator": "^0.18.0"
+    "webpack-obfuscator": "^0.28.2"
   },
   "devDependencies": {
     "css-loader": "^1.0.0",
@@ -38,14 +38,14 @@
     "html-webpack-plugin": "^3.2.0",
     "json-loader": "^0.5.7",
     "mini-css-extract-plugin": "^0.4.3",
-    "node-sass": "^4.9.3",
+    "node-sass": "^4.14.1",
     "pug": "^2.0.3",
     "pug-html-loader": "^1.1.5",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.0",
     "ts-loader": "^5.2.1",
     "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.1",
-    "webpack-dev-server": "^3.8.0"
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
   }
 }

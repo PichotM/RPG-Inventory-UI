@@ -43,7 +43,7 @@ class DragStore {
                 default:
             }
 
-            fetch('http://pichot/inventoryInteraction', { method: 'POST', body: JSON.stringify({
+            fetch(`http://gtalife/inventoryInteraction`, { method: 'POST', body: JSON.stringify({
                 eventName : this.eventName,
                 itemData : this.itemData,
                 itemKey : this.itemKey,

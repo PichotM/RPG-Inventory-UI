@@ -100,7 +100,7 @@ class InventoryStore {
         this.Reset()
         this.inventoryVisible = false
                 
-        fetch('http://pichot/hideInventory', { method: 'POST', body: "{}" })
+        fetch(`http://gtalife/hideInventory`, { method: 'POST', body: "{}" })
     }
 }
 
