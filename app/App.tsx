@@ -30,6 +30,9 @@ export class App extends Component<any, any> {
             },
             updateInventory(inventoryData) {
                 inventoryStore.Create(inventoryData, true)
+            },
+            hideInventory(inventoryData) {
+                inventoryStore.Hide()
             }
         };
 
