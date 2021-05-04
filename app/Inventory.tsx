@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { Component } from 'react'
 import { ItemList } from './ItemList'
-import { Options } from './Options'
+import Options from './Options'
 import { dragStore } from './store/DragStore'
 import { inventoryStore } from './store/InventoryStore'
 import { observer } from '../node_modules/mobx-react'
 import { Item } from './item'
 import { SwitchTransition, CSSTransition  } from 'react-transition-group'
-import { Icons } from './icons'
+import { withTranslation } from 'react-i18next'
 
 const FadeTransition = props => (
     <CSSTransition
@@ -19,9 +19,8 @@ const FadeTransition = props => (
     />
 );
   
-
 @observer
-export class Inventory extends Component<any, any> {
+class Inventory extends Component<any, any> {
     private draggable: HTMLElement = null
 
     constructor(props) {
@@ -57,15 +56,15 @@ export class Inventory extends Component<any, any> {
     }
     
     render() {
-        const icons = Icons
+        const { t } = this.props;
 
         return (
             <div id="inventory">
                 <div className="inventory-list">
                     <div className="item-list-title">
-                        <div className={"title" + (this.state.clothes ? "" : " selected")} onClick={() => this.setState({ clothes : false })}>Inventaire</div>
+                        <div className={"title" + (this.state.clothes ? "" : " selected")} onClick={() => this.setState({ clothes : false })}>{t("Inventaire")}</div>
                         <div className="title" style={{ pointerEvents: 'none' }}>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
-                        <div className={"title" + (!this.state.clothes ? "" : " selected")} onClick={() => this.setState({ clothes : true })} >Vêtements</div>
+                        <div className={"title" + (!this.state.clothes ? "" : " selected")} onClick={() => this.setState({ clothes : true })} >{t("Vêtements")}</div>
                         <div className="infos">{inventoryStore.pocketsWeight} / 45</div>
                     </div>
                     <SwitchTransition>
@@ -76,7 +75,7 @@ export class Inventory extends Component<any, any> {
 
                     <div className="gunInventory">
                         <div className="item-list-title">
-                            <div className="title selected" style={{ pointerEvents: 'none' }}>Armes</div>
+                            <div className="title selected" style={{ pointerEvents: 'none' }}>{t("Armes")}</div>
                         </div>
                         <Item keyNumber="1" eventName="weaponOne" data={inventoryStore.weaponOne && { name : inventoryStore.weaponOne }} />
                         <Item keyNumber="2" eventName="weaponTwo" data={inventoryStore.weaponTwo && { name : inventoryStore.weaponTwo }} />
@@ -89,19 +88,19 @@ export class Inventory extends Component<any, any> {
                 <div className={"inventory-list " + (inventoryStore.targetMaxWeight <= 0 ? "hide" : "")}>
                     {inventoryStore.targetMaxWeight > 0 && (
                     <div className="item-list-title">
-                        <div className={"title" + (this.state.targetClothes ? "" : " selected")} onClick={() => this.setState({ targetClothes : false })}>Coffre</div>
+                        <div className={"title" + (this.state.targetClothes ? "" : " selected")} onClick={() => this.setState({ targetClothes : false })}>{t("Coffre")}</div>
                         <div className="title" style={{ pointerEvents: 'none' }}>&nbsp;&nbsp;|&nbsp;&nbsp;</div>
-                        <div className={"title" + (!this.state.targetClothes ? "" : " selected")} onClick={() => this.setState({ targetClothes : true })} >Vêtements</div>
+                        <div className={"title" + (!this.state.targetClothes ? "" : " selected")} onClick={() => this.setState({ targetClothes : true })} >{t("Vêtements")}</div>
                         <div className="infos">{inventoryStore.targetWeight} / {inventoryStore.targetMaxWeight}</div>
                     </div>
                     )}
                     
                     {inventoryStore.targetMaxWeight > 0 && (
-                    <SwitchTransition>
-                        <FadeTransition key={this.state.targetClothes ? "lol" : "no"}>
-                            <ItemList IsTarget={true} items={this.state.targetClothes ? inventoryStore.targetClothes : inventoryStore.target} eventName="targetInventory" />
-                        </FadeTransition>
-                    </SwitchTransition>
+                        <SwitchTransition>
+                            <FadeTransition key={this.state.targetClothes ? "lol" : "no"}>
+                                <ItemList IsTarget={true} items={this.state.targetClothes ? inventoryStore.targetClothes : inventoryStore.target} eventName="targetInventory" />
+                            </FadeTransition>
+                        </SwitchTransition>
                     )}
                 </div>
 
@@ -112,3 +111,5 @@ export class Inventory extends Component<any, any> {
         )
     }
 }
+
+export default withTranslation('common')(Inventory);

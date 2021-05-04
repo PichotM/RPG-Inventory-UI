@@ -1,10 +1,11 @@
 import * as React from "react";
 import { Component } from "react";
-import { Inventory } from "./Inventory";
+import Inventory from "./Inventory";
 import { observer } from 'mobx-react'
 import { dragStore } from "./store/DragStore";
 import { inventoryStore } from './store/InventoryStore'
 import { CSSTransition } from 'react-transition-group';
+import './i18n';
 
 // TODO redo the router-dorm
 
@@ -36,7 +37,7 @@ export class App extends Component<any, any> {
             }
         };
 
-        window.addEventListener('message', function(event) {
+        window.addEventListener('message', function (event) {
             if (appHandlers[event.data.eventName])
                 appHandlers[event.data.eventName](event.data.eventData)
         })
@@ -49,7 +50,7 @@ export class App extends Component<any, any> {
             if (dragStore.dragging)
                 dragStore.setMouse(e)
         })
-        
+
         this.keydownCB = (e: KeyboardEvent) => {
             if (e.key === 'Tab' || e.key === 'Escape' || e.key === 'K')
                 inventoryStore.Hide()
@@ -65,14 +66,16 @@ export class App extends Component<any, any> {
     render() {
         return (
             <CSSTransition
-            in={inventoryStore.inventoryVisible}
-            classNames='transitionOpacity'
-            timeout={500}
-            unmountOnExit
+                in={inventoryStore.inventoryVisible}
+                classNames='transitionOpacity'
+                timeout={500}
+                unmountOnExit
             >
                 <div className="viewport">
                     <div className="blurBackground"></div>
-                    <Inventory />
+                    <React.Suspense fallback="loading">
+                        <Inventory />
+                    </React.Suspense>
                 </div>
             </CSSTransition>
         )

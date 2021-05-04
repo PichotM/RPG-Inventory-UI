@@ -1,5 +1,6 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: './index.tsx',
@@ -15,8 +16,7 @@ module.exports = {
         historyApiFallback: true
     },
     module: {
-        rules: [
-            {
+        rules: [{
                 test: /\.pug$/,
                 use: ['html-loader?attrs=false', 'pug-html-loader']
             },
@@ -37,8 +37,25 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            template: 'index.pug',
+            template: path.resolve(__dirname, 'public/index.ejs'),
             inject: true
         }),
-    ]
+        new CopyWebpackPlugin([{
+            from: 'public',
+            ignore: ['index.ejs'],
+        }, ])
+    ],
+    optimization: {
+        minimize: false,
+        runtimeChunk: true,
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    chunks: 'all',
+                },
+            },
+        }
+    }
 }

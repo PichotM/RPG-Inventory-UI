@@ -1,11 +1,12 @@
-import * as React from 'react'
-import { Component } from 'react'
+import * as React from 'react';
+import { Component } from 'react';
 import { dragStore } from './store/DragStore';
 import { observer } from '../node_modules/mobx-react';
-import { OptionButton } from './OptionButton'
+import { OptionButton } from './OptionButton';
+import { withTranslation } from 'react-i18next';
 
 @observer
-export class Options extends Component<any, any> {
+class Options extends Component<any, any> {
     constructor(props) {
         super(props)
         this.state = {
@@ -25,17 +26,21 @@ export class Options extends Component<any, any> {
     }
 
     render() {
+        const { t } = this.props;
+
         return (
             <div className="inventory-options">
                 <div className="option-panel">
                     <input type="text" className="option-button" value={this.state.amount} onChange={this.onAmountChange} tabIndex={-1}/>
-                    <OptionButton name="Utiliser" drop="yes" eventName="useInventory" />
-                    <OptionButton name="Donner" drop="yes" eventName="giveInventory" />
-                    <OptionButton name="Jeter" drop="yes" eventName="throwInventory" />
-                    <OptionButton name="Informations" drop="yes" eventName="infoInventory" />
-                    <OptionButton name="Renommer" eventName="renameInventory" />
+                    <OptionButton name={t("Utiliser")} drop="yes" eventName="useInventory" />
+                    <OptionButton name={t("Donner")} drop="yes" eventName="giveInventory" />
+                    <OptionButton name={t("Jeter")} drop="yes" eventName="throwInventory" />
+                    <OptionButton name={t("Informations")} drop="yes" eventName="infoInventory" />
+                    <OptionButton name={t("Renommer")} eventName="renameInventory" />
                 </div>
             </div>
         )
     }
 }
+
+export default withTranslation('common')(Options);
