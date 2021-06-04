@@ -77,9 +77,9 @@ class Inventory extends Component<any, any> {
                         <div className="item-list-title">
                             <div className="title selected" style={{ pointerEvents: 'none' }}>{t("Armes")}</div>
                         </div>
-                        <Item keyNumber="1" eventName="weaponOne" data={inventoryStore.weaponOne && { name : inventoryStore.weaponOne }} />
-                        <Item keyNumber="2" eventName="weaponTwo" data={inventoryStore.weaponTwo && { name : inventoryStore.weaponTwo }} />
-                        <Item keyNumber="3" eventName="weaponThree" data={inventoryStore.weaponThree && { name : inventoryStore.weaponThree }} />
+                        <Item keyNumber="1" eventName="weaponOne" data={inventoryStore.weaponOne && { name : inventoryStore.weaponOne.name, base : inventoryStore.weaponOne.base }} />
+                        <Item keyNumber="2" eventName="weaponTwo" data={inventoryStore.weaponTwo && { name : inventoryStore.weaponTwo.name, base : inventoryStore.weaponTwo.base }} />
+                        <Item keyNumber="3" eventName="weaponThree" data={inventoryStore.weaponThree && { name : inventoryStore.weaponThree.name, base : inventoryStore.weaponThree.base }} />
                     </div>
                 </div>
 

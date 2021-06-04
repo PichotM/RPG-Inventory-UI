@@ -25,9 +25,9 @@ class InventoryStore {
     public targetMaxWeight: Number = process.env.NODE_ENV == 'production' ? -1 : 1;
 
     @observable
-    public weaponOne: String;
-    public weaponTwo: String;
-    public weaponThree: String;
+    public weaponOne: any;
+    public weaponTwo: any;
+    public weaponThree: any;
 
     @observable
     public targetClothes: Object = [];
