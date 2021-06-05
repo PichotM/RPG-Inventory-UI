@@ -2,7 +2,7 @@ export const Icons = {
     "money" : "money",
     "dirty_money" : "money",
     "salmon" : "saumon",
-    "weapon_carbine" : "ar",
+    "weapon_carbinerifle" : "ar",
     "weed" : "weed",
     "fishing_rod" : "rod",
     "weapon_compactlauncher" : "lancegrenade",
